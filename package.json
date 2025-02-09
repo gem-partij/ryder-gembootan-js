@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/gem-partij/ryder-gembootan-js/issues"
   },
-  "homepage": "https://github.com/gem-partij/ryder-gembootan-js#readme"
+  "homepage": "https://github.com/gem-partij/ryder-gembootan-js#readme",
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "mongodb": "^6.13.0"
+  },
+  "type": "module"
 }
