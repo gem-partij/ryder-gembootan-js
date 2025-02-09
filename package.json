@@ -1,0 +1,23 @@
+{
+  "name": "ryder-gembootan",
+  "version": "1.0.0",
+  "description": "Simple Query Builder For Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gem-partij/ryder-gembootan-js.git"
+  },
+  "keywords": [
+    "query",
+    "builder"
+  ],
+  "author": "Angger Priyardhan Putro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gem-partij/ryder-gembootan-js/issues"
+  },
+  "homepage": "https://github.com/gem-partij/ryder-gembootan-js#readme"
+}
