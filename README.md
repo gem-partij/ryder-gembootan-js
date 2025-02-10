@@ -1,9 +1,21 @@
-# Ryder Gembootan [![NPM version](https://img.shields.io/npm/v/ryder-gembootan.svg?style=flat-square)](https://www.npmjs.com/package/ryder-gembootan)
+# ryder-gembootan [![NPM version](https://img.shields.io/npm/v/ryder-gembootan.svg?style=flat-square)](https://www.npmjs.com/package/ryder-gembootan)
 
 Ryder Gembootan is a Simple Query Builder For Javascript.
 
--   [Install](#-install)
--   [Usage](#-usage)
+-   support chaining query like eloquent in laravel
+-   easy to use
+
+### Supported Database
+
+| Database   | Status       |
+| ---------- | ------------ |
+| MongoDB    | ✅ Supported |
+| MySQL      | 🚧 Ongoing   |
+| PostgreSQL | 🚧 Ongoing   |
+| SQLite     | ✅ Supported |
+
+<!-- -   [Install](#-install)
+-   [Usage](#-usage) -->
 
 ## Install
 
@@ -30,8 +42,7 @@ export default class UserModel extends RyderGembootan.MongoModel {
 			"MONGODB_PASS",
 			"MONGODB_HOST",
 			"MONGODB_DBNAME",
-			"MONGODB_COLLNAME",
-			"MONGODB_APPNAME"
+			"MONGODB_COLLNAME"
 		);
 	}
 }

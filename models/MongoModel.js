@@ -2,13 +2,14 @@ import { MongoClient, ObjectId } from 'mongodb';
 
 export default class MongoModel {
 
-    constructor(dbUser, dbPass, dbHost, dbName, collName, appName) {
+    constructor(dbUser, dbPass, dbHost, dbName, collName, appName = '') {
         this._databaseUser = dbUser;
         this._databasePass = dbPass;
         this._databaseHost = dbHost;
         this._databaseName = dbName;
         this._collectionName = collName;
         this._appName = appName;
+
         this._primaryKey = '_id';
 
         this._fillable = [];
