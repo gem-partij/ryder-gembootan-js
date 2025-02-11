@@ -4,7 +4,8 @@ import UserModel from './UserModel.js';
 const main = async () => {
     const model = new UserModel();
 
-    // const result = await model.get();
+    // const result = await model.limit(10).get();
+    const result = await model.orderBy('meta_published_date', 'desc').first();
 
     // const result = await model.create({
     //     name: 'angger',
@@ -22,12 +23,12 @@ const main = async () => {
     //     address: 'semarang'
     // });
 
-    const result = await model.updateOrCreate({
-        email: 'anggerpputro@gmail.com',
-    }, {
-        name: 'angger edit',
-        address: 'bumi'
-    });
+    // const result = await model.updateOrCreate({
+    //     email: 'anggerpputro@gmail.com',
+    // }, {
+    //     name: 'angger edit',
+    //     address: 'bumi'
+    // });
 
     console.log('result', result);
     process.exit();

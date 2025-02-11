@@ -86,7 +86,7 @@ export default class MongoModel {
         try {
             const data = await this.where(this._primaryKey, '=', id)
                 ._getCollection()
-                .findOne(this._buildFilterQueryParam());
+                .findOne(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
 
             this.#resetOperators();
             return data;
@@ -101,7 +101,7 @@ export default class MongoModel {
      */
     async first() {
         try {
-            const data = await this._getCollection().findOne(this._buildFilterQueryParam());
+            const data = await this._getCollection().findOne(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
             this.#resetOperators();
             return data;
         } catch (err) {
@@ -117,10 +117,15 @@ export default class MongoModel {
         try {
             const findResult = this._getCollection()
                 .find(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
-                // .sort(this._buildSortQueryParam());
+            // .sort(this._buildSortQueryParam());
+            
+            console.log('filter', this._buildFilterQueryParam());
+            console.log('options', this._buildOptionsQueryParam());
+            console.log('findResult', await findResult.toArray());
 
             const data = [];
             for await (const doc of findResult) {
+                console.log('doc', doc);
                 data.push(doc);
             }
 
@@ -428,7 +433,7 @@ export default class MongoModel {
 
     #resetOperators() {
         if (this._resetOperatorsAfterQuery) {            
-            this._selects = ['*'];
+            this._selects = [];
             this._wheres = [];
             // this._whereRaws = [];
             this._orderBys = [];
