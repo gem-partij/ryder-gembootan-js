@@ -1,5 +1,5 @@
 // const { SqliteModel } = require("ryder-gembootan");
-import RyderGembootan from "ryder-gembootan";
+import RyderGembootan from "../../index.js";
 
 export default class UserModel extends RyderGembootan.MongoModel {
 

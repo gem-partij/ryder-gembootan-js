@@ -133,6 +133,11 @@ export default class MongoModel {
 
     async create(data) {
         try {
+            if (this._timestamps) {
+                data.created_at = (new Date).toISOString();
+                data.updated_at = (new Date).toISOString();
+            }
+            
             const responseData = await this._getCollection().insertOne(data);
             this.#resetOperators();
             return {
@@ -149,6 +154,13 @@ export default class MongoModel {
 
     async inserts(arrayOfData) {
         try {
+            if (this._timestamps) {
+                for (let i = 0; i < arrayOfData.length; i++) {
+                    arrayOfData[i].created_at = (new Date).toISOString();
+                    arrayOfData[i].updated_at = (new Date).toISOString();
+                }
+            }
+
             const data = await this._getCollection().insertMany(arrayOfData);
             this.#resetOperators();
             return data;
@@ -159,6 +171,10 @@ export default class MongoModel {
 
     async update(data) {
         try {
+            if (this._timestamps) {
+                data.updated_at = (new Date).toISOString();
+            }
+
             const responseData = await this._getCollection().updateOne(this._buildFilterQueryParam(), {
                 $set: data
             });
