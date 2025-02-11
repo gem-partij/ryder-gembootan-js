@@ -169,7 +169,7 @@ export default class MongoModel {
         }
     }
 
-    async update(data) {
+    async update(data, options = {}) {
         try {
             if (this._timestamps) {
                 data.updated_at = (new Date).toISOString();
@@ -177,7 +177,44 @@ export default class MongoModel {
 
             const responseData = await this._getCollection().updateOne(this._buildFilterQueryParam(), {
                 $set: data
-            });
+            }, options);
+            this.#resetOperators();
+            return {
+                status: responseData,
+                data,
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async updateMany(data, options = {}) {
+        try {
+            if (this._timestamps) {
+                data.updated_at = (new Date).toISOString();
+            }
+
+            const responseData = await this._getCollection().updateMany(this._buildFilterQueryParam(), {
+                $set: data
+            }, options);
+            this.#resetOperators();
+            return {
+                status: responseData,
+                data,
+            };
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async replace(data) {
+        try {
+            if (this._timestamps) {
+                data.created_at = (new Date).toISOString();
+                data.updated_at = (new Date).toISOString();
+            }
+
+            const responseData = await this._getCollection().replaceOne(this._buildFilterQueryParam(), data);
             this.#resetOperators();
             return {
                 status: responseData,
@@ -196,20 +233,23 @@ export default class MongoModel {
                 this.where(col, '=', where[col]);
             }
 
-            // check data first
-            const check = await this.first();
+            // // check data first
+            // const check = await this.first();
 
-            // insert if not exists
-            if (check === undefined || check === null) {
-                return await this.create({
-                    ...where,
-                    ...data,
-                });
-            }
-            // update if exists
-            else {
-                return await this.update(data);
-            }
+            // // insert if not exists
+            // if (check === undefined || check === null) {
+            //     return await this.create({
+            //         ...where,
+            //         ...data,
+            //     });
+            // }
+            // // update if exists
+            // else {
+            //     return await this.update(data);
+            // }
+            return await this.updateMany(data, {
+                upsert: true,
+            });
         } catch (err) {
             throw err;
         } finally {
