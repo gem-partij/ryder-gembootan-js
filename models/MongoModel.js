@@ -119,13 +119,13 @@ export default class MongoModel {
                 .find(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
             // .sort(this._buildSortQueryParam());
             
-            console.log('filter', this._buildFilterQueryParam());
-            console.log('options', this._buildOptionsQueryParam());
-            console.log('findResult', await findResult.toArray());
+            // console.log('filter', this._buildFilterQueryParam());
+            // console.log('options', this._buildOptionsQueryParam());
+            // console.log('findResult', await findResult.toArray());
 
             const data = [];
             for await (const doc of findResult) {
-                console.log('doc', doc);
+                // console.log('doc', doc);
                 data.push(doc);
             }
 
