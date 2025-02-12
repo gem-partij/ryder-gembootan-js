@@ -1,6 +1,6 @@
 {
   "name": "ryder-gembootan",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple Query Builder For Javascript",
   "main": "index.js",
   "scripts": {
