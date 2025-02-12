@@ -72,10 +72,10 @@ export default class MongoModel {
         return this;
     }
 
-    // skip(skip) {
-    //     this._skip = skip;
-    //     return this;
-    // }
+    skip(skip) {
+        this._skip = skip;
+        return this;
+    }
 
     orderBy(col, atoz = 'asc') {
         this._orderBys.push([col, atoz]);
@@ -380,9 +380,9 @@ export default class MongoModel {
             options['sort'] = this._buildSortQueryParam();
         }
 
-        // if (this._skip !== undefined) {
-        //     options['skip'] = this._skip;
-        // }
+        if (this._skip !== undefined) {
+            options['skip'] = this._skip;
+        }
 
         if (this._limit !== undefined) {
             options['limit'] = this._limit;
@@ -447,7 +447,7 @@ export default class MongoModel {
             // this._whereRaws = [];
             this._orderBys = [];
             this._limit = undefined;
-            // this._skip = undefined;
+            this._skip = undefined;
             this._offset = undefined;
         }
     }
