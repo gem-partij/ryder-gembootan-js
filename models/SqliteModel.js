@@ -202,7 +202,15 @@ export default class SqliteModel {
     }
 
     delete() {
-        
+        try {
+            const db = this._getDB();
+            const stmt = db.prepare(this._prepareDefaultDeleteStatement());
+            const result = stmt.run();
+            this.#resetOperators();
+            return result;
+        } catch (err) {
+            throw err;
+        }
     }
 
     _prepareDefaultSelectStatement() {
@@ -286,6 +294,25 @@ export default class SqliteModel {
         }
             
         const sql = `UPDATE ${this._tableName} SET ${sets.join(', ')} ${where}`;
+        // console.log(`[model] ${sql}`);
+        return sql;
+    }
+
+    _prepareDefaultDeleteStatement() {
+        let where = '';
+        const whereArr = [];
+        for (let i = 0; i < this._wheres.length; i++) {
+            const w = this._wheres[i];
+            whereArr.push(`${w[0]} ${w[1]} '${w[2]}'`);
+        }
+        for (let i = 0; i < this._whereRaws.length; i++) {
+            whereArr.push(`${this._whereRaws[i]}`);
+        }
+        if (whereArr.length > 0) {
+            where = `WHERE ${whereArr.join(' AND ')}`;
+        }
+
+        const sql = `DELETE FROM ${this._tableName} ${where}`;
         // console.log(`[model] ${sql}`);
         return sql;
     }
