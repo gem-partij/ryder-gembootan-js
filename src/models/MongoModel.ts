@@ -1,6 +1,6 @@
 import { MongoClient, ObjectId, Db, Collection, Document, UpdateOptions } from 'mongodb';
 
-export default abstract class MongoModel {
+export default class MongoModel {
     _databaseUser: string;
     _databasePass: string;
     _databaseHost: string;
