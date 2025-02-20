@@ -1,6 +1,6 @@
 {
   "name": "ryder-gembootan",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple Query Builder For Javascript",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",

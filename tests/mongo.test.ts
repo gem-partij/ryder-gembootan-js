@@ -16,6 +16,7 @@ test('create user', async () => {
     // });
     expect(result).toHaveProperty('data.name', 'angger');
     expect(result).toHaveProperty('data.email', 'anggerpputro@gmail.com');
+    // process.exit();
 });
 
 test('update user', async () => {
@@ -25,6 +26,7 @@ test('update user', async () => {
     });
 
     expect(result).toHaveProperty('data.name', 'angger priyardhan');
+    // process.exit();
 });
 
 test('delete user', async () => {
@@ -32,4 +34,5 @@ test('delete user', async () => {
     const result = await model.where('email', '=', 'anggerpputro@gmail.com').delete();
 
     expect(result).toHaveProperty('data', null);
+    // process.exit();
 });
