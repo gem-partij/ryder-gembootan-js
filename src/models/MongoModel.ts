@@ -9,6 +9,7 @@ export interface MongoCreateResult {
 }
 
 export default class MongoModel {
+    _connectionProtocol: string;
     _databaseUser: string;
     _databasePass: string;
     _databaseHost: string;
@@ -34,7 +35,16 @@ export default class MongoModel {
     _offset: number|undefined;
     _orderBys: Array<Array<string>> = [];
 
-    constructor(dbUser: string, dbPass: string, dbHost: string, dbName: string, collName: string, appName: string|undefined = undefined) {
+    constructor(
+        dbUser: string,
+        dbPass: string,
+        dbHost: string,
+        dbName: string,
+        collName: string,
+        appName: string | undefined = undefined,
+        connectionProtocol: string = "mongodb+srv"
+    ) {
+        this._connectionProtocol = connectionProtocol;
         this._databaseUser = dbUser;
         this._databasePass = dbPass;
         this._databaseHost = dbHost;
@@ -53,9 +63,16 @@ export default class MongoModel {
         this.#resetOperators();
     }
 
+    _setConnectionProtocol(connectionProtocol: string) {
+        if (this._connectionProtocol != connectionProtocol) {            
+            this._connectionProtocol = connectionProtocol;
+            this._initDB();
+        }
+    }
+
     _initDB() {
         // Replace the uri string with your connection string.
-        const uri = `mongodb+srv://${this._databaseUser}:${this._databasePass}@${this._databaseHost}/?retryWrites=true&w=majority&appName=${this._appName}`;
+        const uri = `${this._connectionProtocol}://${this._databaseUser}:${this._databasePass}@${this._databaseHost}/?retryWrites=true&w=majority&appName=${this._appName}`;
         this._mongoClient = new MongoClient(uri);
         return this._mongoClient;
     }
