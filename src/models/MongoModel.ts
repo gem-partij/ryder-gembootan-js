@@ -1,6 +1,11 @@
-import { MongoClient, ObjectId, Db, Collection, Document, UpdateOptions } from 'mongodb';
+import { MongoClient, ObjectId, Db, Collection, Document, UpdateOptions, InsertOneResult } from 'mongodb';
 
 export interface MongoDocument extends Document {
+}
+
+export interface MongoCreateResult {
+    status: InsertOneResult;
+    data: any;
 }
 
 export default class MongoModel {
@@ -169,7 +174,7 @@ export default class MongoModel {
         }
     }
 
-    async create(data: any) {
+    async create(data: any): Promise<MongoCreateResult> {
         try {
             if (this._timestamps) {
                 data.created_at = (new Date).toISOString();
