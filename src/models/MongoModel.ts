@@ -26,7 +26,7 @@ export default class MongoModel {
     _offset: number|undefined;
     _orderBys: Array<Array<string>> = [];
 
-    constructor(dbUser: string, dbPass: string, dbHost: string, dbName: string, collName: string, appName: string|undefined) {
+    constructor(dbUser: string, dbPass: string, dbHost: string, dbName: string, collName: string, appName: string|undefined = undefined) {
         this._databaseUser = dbUser;
         this._databasePass = dbPass;
         this._databaseHost = dbHost;
