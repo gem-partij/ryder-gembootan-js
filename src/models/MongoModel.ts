@@ -6,7 +6,7 @@ export default class MongoModel {
     _databaseHost: string;
     _databaseName: string;
     _collectionName: string;
-    _appName: string;
+    _appName: string|undefined;
 
     _primaryKey: string;
     _tableName: string = '';
@@ -26,7 +26,7 @@ export default class MongoModel {
     _offset: number|undefined;
     _orderBys: Array<Array<string>> = [];
 
-    constructor(dbUser: string, dbPass: string, dbHost: string, dbName: string, collName: string, appName: string = '') {
+    constructor(dbUser: string, dbPass: string, dbHost: string, dbName: string, collName: string, appName: string|undefined) {
         this._databaseUser = dbUser;
         this._databasePass = dbPass;
         this._databaseHost = dbHost;
