@@ -1,5 +1,8 @@
 import { MongoClient, ObjectId, Db, Collection, Document, UpdateOptions } from 'mongodb';
 
+export interface MongoDocument extends Document {
+}
+
 export default class MongoModel {
     _databaseUser: string;
     _databasePass: string;
@@ -143,7 +146,7 @@ export default class MongoModel {
      * get array of data
      * @returns [] if no data
      */
-    async get() {
+    async get(): Promise<Array<MongoDocument>> {
         try {
             const findResult = this._getCollection()
                 .find(this._buildFilterQueryParam(), this._buildOptionsQueryParam());

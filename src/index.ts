@@ -1,5 +1,7 @@
-import MongoModel from "./models/MongoModel";
+import MongoModel, { MongoDocument } from "./models/MongoModel";
 
-export default {
-    MongoModel
+const _default = {
+    MongoModel,
 };
+
+export { _default as default, MongoModel, MongoDocument };

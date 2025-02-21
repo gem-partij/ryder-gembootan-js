@@ -1,9 +1,18 @@
 import 'dotenv/config';
 import UserModelMongo from './UserModelMongo';
+import { MongoDocument } from '../src';
 
-test('create user', async () => {
+test('get user', async () => {
     const model = new UserModelMongo();
-    const result = await model.create({
+    const results: Array<MongoDocument> = await model.limit(10).get();
+    expect(results).toBeDefined();
+});
+
+test('create if not exists user', async () => {
+    const model = new UserModelMongo();
+    const result = await model.updateOrCreate({
+        email: 'anggerpputro@gmail.com',
+    },{
         name: 'angger',
         email: 'anggerpputro@gmail.com',
     });
