@@ -1,5 +1,7 @@
 import { MongoClient, ObjectId, Db, Collection, Document, UpdateOptions, InsertOneResult } from 'mongodb';
 
+let mongoClient: MongoClient | undefined;
+
 export interface MongoDocument extends Document {
 }
 
@@ -66,14 +68,19 @@ export default class MongoModel {
     _setConnectionProtocol(connectionProtocol: string) {
         if (this._connectionProtocol != connectionProtocol) {            
             this._connectionProtocol = connectionProtocol;
-            this._initDB();
+            this._initDB(true);
         }
     }
 
-    _initDB() {
+    _initDB(forceRecreateConnection: boolean = false) {
         // Replace the uri string with your connection string.
         const uri = `${this._connectionProtocol}://${this._databaseUser}:${this._databasePass}@${this._databaseHost}/?retryWrites=true&w=majority&appName=${this._appName}`;
-        this._mongoClient = new MongoClient(uri);
+        if (mongoClient === undefined || forceRecreateConnection) {
+            mongoClient = new MongoClient(uri, {
+                maxIdleTimeMS: 300000,
+            });
+        }
+        this._mongoClient = mongoClient;
         return this._mongoClient;
     }
 
@@ -91,6 +98,14 @@ export default class MongoModel {
         } catch (err) {
             throw err;
         }
+    }
+
+    async _connectToClient() {
+        await this._mongoClient.connect();
+    }
+
+    async _closeClientConnection() {
+        await this._mongoClient.close();
     }
 
     select(...select: Array<string>): MongoModel {
@@ -138,6 +153,7 @@ export default class MongoModel {
      * @returns null if no data
      */
     async find(id: number) {
+        await this._connectToClient();
         try {
             const data = await this.where(this._primaryKey, '=', id)
                 ._getCollection()
@@ -147,6 +163,8 @@ export default class MongoModel {
             return data;
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
@@ -155,12 +173,15 @@ export default class MongoModel {
      * @returns null if no data
      */
     async first() {
+        await this._connectToClient();
         try {
             const data = await this._getCollection().findOne(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
             this.#resetOperators();
             return data;
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
@@ -169,6 +190,7 @@ export default class MongoModel {
      * @returns [] if no data
      */
     async get(): Promise<Array<MongoDocument>> {
+        await this._connectToClient();
         try {
             const findResult = this._getCollection()
                 .find(this._buildFilterQueryParam(), this._buildOptionsQueryParam());
@@ -188,10 +210,13 @@ export default class MongoModel {
             return data;
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async create(data: any): Promise<MongoCreateResult> {
+        await this._connectToClient();
         try {
             if (this._timestamps) {
                 data.created_at = (new Date).toISOString();
@@ -209,10 +234,13 @@ export default class MongoModel {
             };
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async inserts(arrayOfData: Array<any>) {
+        await this._connectToClient();
         try {
             if (this._timestamps) {
                 for (let i = 0; i < arrayOfData.length; i++) {
@@ -226,10 +254,13 @@ export default class MongoModel {
             return data;
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async update(data: any, options: UpdateOptions = {}) {
+        await this._connectToClient();
         try {
             if (this._timestamps) {
                 data.updated_at = (new Date).toISOString();
@@ -245,10 +276,13 @@ export default class MongoModel {
             };
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async updateMany(data: any, options: UpdateOptions = {}) {
+        await this._connectToClient();
         try {
             if (this._timestamps) {
                 data.updated_at = (new Date).toISOString();
@@ -264,10 +298,13 @@ export default class MongoModel {
             };
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async replace(data: any) {
+        await this._connectToClient();
         try {
             if (this._timestamps) {
                 data.created_at = (new Date).toISOString();
@@ -282,10 +319,13 @@ export default class MongoModel {
             };
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
     async updateOrCreate(where: any, data: any) {
+        await this._connectToClient();
         this._resetOperatorsAfterQuery = false;
         try {
             // apply where
@@ -314,10 +354,12 @@ export default class MongoModel {
             throw err;
         } finally {
             this._resetOperatorsAfterQuery = true;
+            await this._closeClientConnection();
         }
     }
 
     async delete() {
+        await this._connectToClient();
         try {
             const result = await this._getCollection().deleteMany(this._buildFilterQueryParam());
             this.#resetOperators();
@@ -327,6 +369,8 @@ export default class MongoModel {
             };
         } catch (err) {
             throw err;
+        } finally {
+            await this._closeClientConnection();
         }
     }
 
