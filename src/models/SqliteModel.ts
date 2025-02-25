@@ -1,11 +1,14 @@
 // import sqlite3 from "sqlite3";
 // const Database = require('better-sqlite3');
-import Database from "better-sqlite3";
+import DatabaseConstructor, { Database, Options } from "better-sqlite3";
+
+export interface DatabaseOptions extends Options {
+}
 
 export default class SqliteModel {
     _fileName: string;
     _tableName: string;
-    _connOptions: Database.Options;
+    _connOptions: DatabaseOptions;
     _primaryKey: string;
 
     _fillable: Array<string>;
@@ -20,7 +23,7 @@ export default class SqliteModel {
     _offset: number|undefined;
     _orderBys: Array<Array<string>> = [];
 
-    constructor(fileName: string, tableName: string, options: Database.Options = {}) {
+    constructor(fileName: string, tableName: string, options: DatabaseOptions = {}) {
         this._fileName = fileName;
         this._tableName = tableName;
         this._connOptions = options;
@@ -38,13 +41,13 @@ export default class SqliteModel {
     _initDB() {
     }
 
-    _getDB() {
+    _getDB(): Database {
         try {
             // return new sqlite3.Database('../scraper-nodejs.db');
             // return new Database('./database-sqlite.db', {
             //     // verbose: console.log
             // });
-            return new Database(this._fileName, this._connOptions);
+            return new DatabaseConstructor(this._fileName, this._connOptions);
         } catch (err) {
             throw err;
         }
