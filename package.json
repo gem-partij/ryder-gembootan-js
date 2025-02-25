@@ -1,6 +1,6 @@
 {
   "name": "ryder-gembootan",
-  "version": "1.1.10",
+  "version": "1.2.0",
   "description": "Simple Query Builder For Javascript",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/gem-partij/ryder-gembootan-js#readme",
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.12",
     "better-sqlite3": "^11.8.1",
     "dotenv": "^16.4.7",
     "mongodb": "^6.13.0"
